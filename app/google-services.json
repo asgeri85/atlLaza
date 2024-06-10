@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "528292888958",
+    "project_id": "atlproject7",
+    "storage_bucket": "atlproject7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:528292888958:android:8081b476ddc68f66cff32f",
+        "android_client_info": {
+          "package_name": "net.asgeri.atlproject7"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwt7jkP6lb5DqcZtLrZpDfPa9Nxm64kgM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
