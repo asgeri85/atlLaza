@@ -48,14 +48,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun login() {
-        val email = binding.editEmailLogin.text.toString().trim()
+       /* val email = binding.editEmailLogin.text.toString().trim()
         val password = binding.editPasswordLogin.text.toString().trim()
 
         if (email.isNotEmpty() && password.isNotEmpty()) {
             viewModel.loginUser(email, password)
         } else {
             Toast.makeText(context, "Boş ola bilmez", Toast.LENGTH_SHORT).show()
-        }
+        }*/
     }
 
     private fun setUserAuth() {

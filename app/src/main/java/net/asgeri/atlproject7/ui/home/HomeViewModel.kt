@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import net.asgeri.atlproject7.R
 import net.asgeri.atlproject7.model.BrandModel
 import net.asgeri.atlproject7.model.ProductResponse
+import net.asgeri.atlproject7.source.NetworkResource
 import net.asgeri.atlproject7.source.remote.Repository
 import javax.inject.Inject
 
@@ -45,19 +46,20 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
     private fun getProducts() {
         loading.value = true
         viewModelScope.launch {
-            try {
-                val response = repository.getAllProducts()
-
-                if (response.isSuccessful) {
-                    response.body()?.let {
+            when (val response = repository.getAllProducts()) {
+                is NetworkResource.Success -> {
+                    response.data?.let {
                         data.value = it
+                        loading.value = false
                     }
-                } else {
-                    error.value = response.errorBody().toString()
                 }
 
-            } catch (e: Exception) {
-                error.value = e.localizedMessage.toString()
+                is NetworkResource.Error -> {
+                    response.message?.let {
+                        error.value = it
+                        loading.value = false
+                    }
+                }
             }
         }
     }
