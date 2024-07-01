@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import net.asgeri.atlproject7.R
 import net.asgeri.atlproject7.model.BrandModel
@@ -46,18 +48,20 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
     private fun getProducts() {
         loading.value = true
         viewModelScope.launch {
-            when (val response = repository.getAllProducts()) {
-                is NetworkResource.Success -> {
-                    response.data?.let {
-                        data.value = it
-                        loading.value = false
+            repository.getAllProducts().collectLatest { response ->
+                when (response) {
+                    is NetworkResource.Success -> {
+                        response.data?.let {
+                            data.value = it
+                            loading.value = false
+                        }
                     }
-                }
 
-                is NetworkResource.Error -> {
-                    response.message?.let {
-                        error.value = it
-                        loading.value = false
+                    is NetworkResource.Error -> {
+                        response.message?.let {
+                            error.value = it
+                            loading.value = false
+                        }
                     }
                 }
             }

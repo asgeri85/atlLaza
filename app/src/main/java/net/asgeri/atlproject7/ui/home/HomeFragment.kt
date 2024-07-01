@@ -1,11 +1,18 @@
 package net.asgeri.atlproject7.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import net.asgeri.atlproject7.base.BaseFragment
 import net.asgeri.atlproject7.databinding.FragmentHomeBinding
 import net.asgeri.atlproject7.utils.gone
@@ -25,7 +32,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         binding.rvBrand.adapter = brandAdapter
         binding.rvProduct.adapter = productAdapter
 
+        val list = arrayListOf<Int>()
 
+        lifecycleScope.launch {
+            getNumber().filter { it % 2 == 0 }.collect {
+                list.add(it)
+            }
+        }
+
+    }
+
+    suspend fun getNumber() = flow {
+        emit(1)
+        emit(2)
+        emit(3)
+        emit(4)
     }
 
     private fun observeData() {

@@ -1,6 +1,9 @@
 package net.asgeri.atlproject7.source.remote
 
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import net.asgeri.atlproject7.source.NetworkResource
 import retrofit2.Response
@@ -21,20 +24,17 @@ class Repository @Inject constructor(
         productService.getAllProducts()
     }
 
-
-
-
-    private suspend fun <T> safeApiRequest(request: suspend () -> Response<T>): NetworkResource<T> {
-        return try {
+    private suspend fun <T> safeApiRequest(request: suspend () -> Response<T>) = flow {
+        try {
             if (request.invoke().isSuccessful) {
-                NetworkResource.Success(request().body())
+                emit(NetworkResource.Success(request().body()))
             } else {
-                NetworkResource.Error(request().errorBody().toString())
+                emit(NetworkResource.Error(request().errorBody().toString()))
             }
         } catch (e: Exception) {
-            NetworkResource.Error(e.localizedMessage.toString())
+            emit(NetworkResource.Error(e.localizedMessage.toString()))
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
 
 }
